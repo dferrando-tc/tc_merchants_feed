@@ -1,0 +1,34 @@
+service: tc-merchants-feed
+provider:
+  profile: ${file(./config.${self:provider.stage}.json):profile}
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: us-west-2
+  runtime: nodejs10.x
+  memorySize: 512    
+  timeout: 30
+  role: ${file(./config.${self:provider.stage}.json):lambdaRole}
+  environment:
+    STAGE: ${opt:stage, 'dev'}
+    RDS_HOST: ${file(./config.${self:provider.stage}.json):rdsHost}
+    RDS_DATABASE: ${file(./config.${self:provider.stage}.json):rdsDataBase}
+    RDS_USER: ${file(./config.${self:provider.stage}.json):rdsUser}
+    RDS_PASSWORD: ${file(./config.${self:provider.stage}.json):rdsPassword}
+package:
+  individually: true
+  exclude:
+    - handlers/*/*
+functions:
+  merchantDataFeed:
+    handler: ./index.handler
+    layers:
+      - ${file(./config.${self:provider.stage}.json):mysqlLambdaLayer}
+    name: merchantDataFeed-${self:provider.stage}
+    package:
+      include:
+        - index.js
+    events:
+      - http:
+          path: merchantsDataFeed/{id}/{fileName}
+          method: get
+          cors: true

@@ -1,0 +1,9 @@
+{
+  "profile": "tc-dat",
+  "rdsHost": "vdp-prod-new.c2b59vf2suw7.us-west-2.rds.amazonaws.com",
+  "rdsDataBase": "vdp_prod_new",
+  "rdsUser": "root",
+  "rdsPassword": "12t5erv3r",
+  "lambdaRole": "arn:aws:iam::370170857331:role/merchants_datafeeds_basic_execution",
+  "mysqlLambdaLayer": "arn:aws:lambda:us-west-2:370170857331:layer:mysql-lambda-layer:1"
+}
